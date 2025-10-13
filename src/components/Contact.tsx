@@ -1,13 +1,39 @@
 import { useState } from "react";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
     const [sent, setSent] = useState(false);
+    const [sending, setSending] = useState(false);
+    const [error, setError] = useState(false);
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setSent(true);
-        e.currentTarget.reset();
-        setTimeout(() => setSent(false), 3500);
+        setSending(true);
+        setError(false);
+
+        const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+        const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+        const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+        if (!serviceID || !templateID || !publicKey) {
+            console.error('EmailJS Konfiguration fehlt!');
+            setError(true);
+            setSending(false);
+            return;
+        }
+
+        emailjs.sendForm(serviceID, templateID, e.currentTarget, publicKey)
+            .then(() => {
+                setSent(true);
+                setSending(false);
+                e.currentTarget.reset();
+                setTimeout(() => setSent(false), 3500);
+            })
+            .catch((err) => {
+                console.error('Fehler beim Senden:', err);
+                setError(true);
+                setSending(false);
+            });
     };
 
     return (
@@ -15,11 +41,11 @@ const Contact = () => {
             id="contact"
             className="w-full mx-auto px-6 py-24 content-overlay border-t-2 border-gradient"
         >
-            <header className="text-center mb-14">
-                <h2 className="text-5xl font-bold mb-3">
+            <header className="text-center mb-10 sm:mb-12 lg:mb-14">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">
                     <span className="text-header">Kontakt</span>
                 </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-purple-400 mx-auto rounded-full" />
+                <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-purple-600 to-purple-400 mx-auto rounded-full"></div>
             </header>
 
             <form
@@ -60,6 +86,7 @@ const Contact = () => {
                         className="h-11 px-4 rounded-lg bg-[color:var(--dark-purple)]/70 border border-white/10 text-white placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[color:var(--accent-purple)]/40 glow-hover"
                     />
                 </label>
+
                 <label className="flex flex-col text-sm">
                     <span className="mb-2 text-[color:var(--text-muted)]">Nachricht *</span>
                     <textarea
@@ -86,9 +113,10 @@ const Contact = () => {
                 <div className="mt-2 flex flex-wrap items-center gap-4">
                     <button
                         type="submit"
-                        className="px-6 h-11 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-500 hover:to-purple-700 transition-all glow-hover focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+                        disabled={sending}
+                        className="px-6 h-11 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-500 hover:to-purple-700 transition-all glow-hover focus:outline-none focus:ring-2 focus:ring-purple-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Nachricht senden
+                        {sending ? 'Wird gesendet...' : 'Nachricht senden'}
                     </button>
 
                     <a
@@ -100,8 +128,14 @@ const Contact = () => {
                 </div>
 
                 {sent && (
-                    <div className="mt-4 rounded-lg border border-white/10 bg-[color:var(--dark-purple)]/70 p-4 text-sm text-gray-200">
-                        Danke! Deine Nachricht wurde gesendet. Ich melde mich bald zurück.
+                    <div className="mt-4 rounded-lg border border-green-500/20 bg-green-950/30 p-4 text-sm text-green-200">
+                        ✓ Danke! Deine Nachricht wurde gesendet. Ich melde mich bald zurück.
+                    </div>
+                )}
+
+                {error && (
+                    <div className="mt-4 rounded-lg border border-red-500/20 bg-red-950/30 p-4 text-sm text-red-200">
+                        ✗ Fehler beim Senden. Bitte versuche es erneut oder nutze den direkten E-Mail-Link.
                     </div>
                 )}
             </form>
