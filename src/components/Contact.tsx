@@ -10,6 +10,7 @@ const Contact = () => {
         e.preventDefault();
         setSending(true);
         setError(false);
+        setSent(false);
 
         const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
         const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -25,12 +26,14 @@ const Contact = () => {
         emailjs.sendForm(serviceID, templateID, e.currentTarget, publicKey)
             .then(() => {
                 setSent(true);
+                setError(false);
                 setSending(false);
                 e.currentTarget.reset();
                 setTimeout(() => setSent(false), 3500);
             })
             .catch((err) => {
                 console.error('Fehler beim Senden:', err);
+                setSent(false);
                 setError(true);
                 setSending(false);
             });
