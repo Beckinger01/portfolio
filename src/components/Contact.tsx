@@ -6,12 +6,14 @@ const Contact = () => {
     const [sending, setSending] = useState(false);
     const [error, setError] = useState(false);
 
+    console.log('States:', { sent, sending, error });
+
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSending(true);
         setError(false);
         setSent(false);
-
+        
         const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
         const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
         const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -23,16 +25,21 @@ const Contact = () => {
             return;
         }
 
-        emailjs.sendForm(serviceID, templateID, e.currentTarget, publicKey)
-            .then(() => {
+        const form = e.currentTarget;
+
+        emailjs.sendForm(serviceID, templateID, form, publicKey)
+            .then((response) => {
+                console.log('✅ E-Mail erfolgreich gesendet:', response);
                 setSent(true);
                 setError(false);
                 setSending(false);
-                e.currentTarget.reset();
+                form.reset();
                 setTimeout(() => setSent(false), 3500);
             })
             .catch((err) => {
-                console.error('Fehler beim Senden:', err);
+                console.error('❌ Fehler beim Senden:', err);
+                console.error('Error text:', err.text);
+                console.error('Error status:', err.status);
                 setSent(false);
                 setError(true);
                 setSending(false);
