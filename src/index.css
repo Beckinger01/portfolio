@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;800&display=swap');
+@import "tailwindcss";
+
+/* Eigene Farb-Variablen */
+:root {
+  --bg-color: #000000;
+  --primary-purple: #8B45FF;
+  --accent-purple: #CB86FF;
+  --secondary-purple: #4B0082;
+  --dark-purple: #2D1B3D;
+  --text-light: #FFFFFF;
+  --text-muted: #B8B8B8;
+  --text-dim: #888888;
+  --header: #9810fa;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.text-header{
+  color: var(--header);
+}
+
+.border-gradient {
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: var(--gb,
+      linear-gradient(90deg, var(--primary-purple), var(--accent-purple)));
+}
