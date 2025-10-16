@@ -10,8 +10,8 @@ const AboutText = () => {
 
             <div className="space-y-4 sm:space-y-5 lg:space-y-6">
                 <p className="text-lg sm:text-xl text-gray-200 leading-relaxed">
-                    Hey, ich bin <span className="text-white font-semibold">Niklas</span> – Student und Frontend-Entwickler
-                    mit besonderem Fokus auf <span className="text-purple-400 font-medium">React</span>.
+                    Hey, ich bin <span className="text-white font-semibold">Niklas</span> – Student und Web-Entwickler
+                    mit besonderem Fokus auf das <span className="text-purple-400 font-medium">Frontend</span> und <span className="text-purple-400 font-medium">React</span>.
                 </p>
 
                 <p className="text-base sm:text-lg text-gray-300 leading-relaxed">

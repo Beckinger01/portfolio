@@ -17,7 +17,7 @@ const Hero = () => {
       {/* Text */}
       <div className="max-w-xl text-center lg:text-left w-full">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-          <span className="text-header font-bold">Frontend</span>
+          <span className="text-header font-bold">Web</span>
           <span className="text-white block mt-2">Developer</span>
         </h1>
 
@@ -25,7 +25,7 @@ const Hero = () => {
           Moin, ich bin <span className="text-white font-semibold">Niklas</span>.
           <br />
           Student und seit über einem Jahr{" "}
-          <span className="text-purple-300">Frontend-Entwickler</span>.
+          <span className="text-purple-300">Web-Entwickler</span>.
         </p>
 
         <div className="mt-6 sm:mt-8">
